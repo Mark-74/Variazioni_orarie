@@ -3,8 +3,9 @@ from discord.ext import commands, tasks
 from discord import app_commands
 
 instances = dict()
+tzinfo = datetime.timezone(datetime.timedelta(hours=2))
 times = [
-    datetime.time(hour=15)
+    datetime.time(hour=19, minute=2, tzinfo=tzinfo)
 ]
 
 token = open('token.txt', 'r').readline()

@@ -1,4 +1,4 @@
-import discord, requests, datetime, os, camelot, asyncio
+import discord, requests, datetime, os, camelot, asyncio, json
 
 days = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica']
 month_names = {
@@ -26,15 +26,25 @@ class server:
         self.channel = channel
         self.class_identifier = class_identifier
     
-    async def update(self): #TODO: add txt of previous variations to update only the new ones
-        current_date = datetime.datetime.now()
-        day_of_week = days[(current_date.weekday() + 1) % 7]
-        day_number = current_date.day
-        month = month_names[current_date.month]
+    async def send_variation(self, variation: object, deleted=False):
+        color = 0x1dcf4c if deleted is False else 0xed1515
+        embed = embed = discord.Embed(title=f"{variation['class']} - Variazione", color=0x1dcf4c)
+        embed.add_field(name=f"{variation['hour']} ora - Docente assente: ", value=f"{variation['absent_professor']} -> {variation['substitute']}", inline=False)
+        embed.add_field(name="Note: ", value=variation['note'], inline=False)
+        embed.set_footer(text="---------------------------------------------------------------------------------")
+        
+        await self.channel.send(embed=embed)
+
+    async def update(self):
+        date = datetime.datetime.today() + datetime.timedelta(days=1)
+        day_of_week = days[date.weekday()]
+        day_number = date.day
+        month = month_names[date.month]
         
         if day_of_week == days[6]: return
         
         pdf_path = f'./{month}-{day_number}.pdf'
+        json_path= f'./{month}-{day_number}-{self.class_identifier}.json'
         
         if not os.path.exists(pdf_path):
             
@@ -58,11 +68,27 @@ class server:
                         output.append(self.make_output_row(self.class_identifier, int(row[1]), row[2], row[3], row[-2]))
                     except: pass
         
-        for variation in output:
-            #if variation['absent_professor'] == '-': variation['absent_professor'] = 'Nessun sostituto'
-            embed = embed = discord.Embed(title=f"{variation['class']} - Variazione", color=0x1dcf4c)
-            embed.add_field(name=f"{variation['hour']} ora - Docente assente: ", value=f"{variation['absent_professor']} -> {variation['substitute']}", inline=False)
-            embed.add_field(name="Note: ", value=variation['note'], inline=False)
-            embed.set_footer(text="---------------------------------------------------------------------------------")
-            
-            await self.channel.send(embed=embed)
+        deleted_variations = []
+        
+        if not os.path.exists(json_path):
+            with open(json_path, 'w') as file:
+                for variation in output:
+                    file.write(json.dumps(variation))
+        else:
+            old_output = [json.loads(variation) for variation in open(json_path, 'r').readlines()]
+
+            for variation in old_output:
+                if variation in output: 
+                    output.remove(variation)
+                else:
+                    deleted_variations.append(variation)
+                    old_output.remove(variation)
+        
+        for variation in deleted_variations:
+            await self.send_variation(variation=variation, deleted=True)
+        
+        with open(json_path, 'w') as file:
+            for variation in output:
+                #if variation['absent_professor'] == '-': variation['absent_professor'] = 'Nessun sostituto'
+                await self.send_variation(variation=variation)
+                file.write(json.dumps(variation))
