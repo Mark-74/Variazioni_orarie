@@ -36,7 +36,7 @@ class server:
         await self.channel.send(embed=embed)
 
     async def update(self):
-        date = datetime.datetime.today() + datetime.timedelta(days=1)
+        date = datetime.datetime.today() #+ datetime.timedelta(days=1)
         day_of_week = days[date.weekday()]
         day_number = date.day
         month = month_names[date.month]
@@ -44,7 +44,7 @@ class server:
         if day_of_week == days[6]: return
         
         pdf_path = f'./{month}-{day_number}.pdf'
-        json_path= f'./{month}-{day_number}-{self.class_identifier}.json'
+        json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild.id}.json'
         
         if not os.path.exists(pdf_path):
             
