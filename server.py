@@ -91,4 +91,4 @@ class server:
             for variation in output:
                 #if variation['absent_professor'] == '-': variation['absent_professor'] = 'Nessun sostituto'
                 await self.send_variation(variation=variation)
-                file.write(json.dumps(variation))
+                file.write(json.dumps(variation) + "\n")
