@@ -21,8 +21,8 @@ class server:
             'note': note
         }
         
-    def __init__(self, guild: discord.Guild, channel: discord.channel, class_identifier: str) -> None:
-        self.guild = guild
+    def __init__(self, guild_id: discord.Guild.id, channel: discord.channel, class_identifier: str) -> None:
+        self.guild_id = guild_id
         self.channel = channel
         self.class_identifier = class_identifier
     
@@ -44,11 +44,11 @@ class server:
         if day_of_week == days[6]: return
         
         pdf_path = f'./{month}-{day_number}.pdf'
-        json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild.id}.json'
+        json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
         
         if not os.path.exists(pdf_path):
             
-            response = await requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month))
+            response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month))
             
             with open(pdf_path, 'wb') as file:
                 file.write(response.content)
