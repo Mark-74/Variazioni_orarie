@@ -36,7 +36,7 @@ class server:
         await self.channel.send(embed=embed)
 
     async def update(self):
-        date = datetime.datetime.today() #+ datetime.timedelta(days=1)
+        date = datetime.datetime.today() + datetime.timedelta(days=1)
         day_of_week = days[date.weekday()]
         day_number = date.day
         month = month_names[date.month]
