@@ -4,4 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: "VariazioniOrarioBot"
-    restart: always
+    volumes:
+      - " <your_path>:/app"
+    restart: unless-stopped
