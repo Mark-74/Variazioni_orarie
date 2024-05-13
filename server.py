@@ -8,8 +8,8 @@ month_names = {
 
 class server:
     @staticmethod
-    def get_url(day_of_week: str, day_number: int, month: str, version:int) -> str:
-        return f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-2024-{version}.pdf" if version != 0 else f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-2024.pdf"
+    def get_url(day_of_week: str, day_number: int, month: str, year:int, version:int) -> str:
+        return f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-{year}-{version}.pdf" if version != 0 else f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-{year}.pdf"
     
     @staticmethod 
     def make_output_row(class_identifier: str, hour: int | None, absent_professor: str, substitute: str, note: str) -> object:
@@ -59,6 +59,7 @@ class server:
         day_of_week = days[date.weekday()]
         day_number = date.day
         month = month_names[date.month]
+        year = date.year
         
         if day_of_week == days[6]: return
         
@@ -68,7 +69,7 @@ class server:
         if not os.path.exists(pdf_path):
             ok_response = None
             for i in range(10):
-                response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, version=i))
+                response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, year=year, version=i))
             
                 if response.status_code == 200: ok_response = response
                 else: break
