@@ -63,8 +63,8 @@ class server:
         
         if day_of_week == days[6]: return
         
-        pdf_path = f'.\\{month}-{day_number}.pdf'
-        json_path= f'.\\{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
+        pdf_path = f'./{month}-{day_number}.pdf'
+        json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
         
         if not os.path.exists(pdf_path):
             ok_response = None
