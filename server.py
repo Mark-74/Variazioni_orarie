@@ -73,7 +73,7 @@ class server:
                 if response.status_code == 200: ok_response = response
                 else: break
             
-            if ok_response:
+            if ok_response is not None:
                 with open(pdf_path, 'wb') as file:
                     file.write(ok_response.content)
             else: return
