@@ -69,6 +69,8 @@ class server:
             
             response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month))
             
+            if response.status_code != 200: return
+            
             with open(pdf_path, 'wb') as file:
                 file.write(response.content)
                 

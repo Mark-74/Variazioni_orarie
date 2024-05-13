@@ -8,6 +8,7 @@ times = [
     datetime.time(hour=14, tzinfo=tzinfo),
     datetime.time(hour=16, tzinfo=tzinfo),
     datetime.time(hour=18, tzinfo=tzinfo),
+    datetime.time(hour=20, tzinfo=tzinfo),
     datetime.time(hour=20, tzinfo=tzinfo)
 ]
 
