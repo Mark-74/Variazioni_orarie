@@ -9,7 +9,7 @@ month_names = {
 class server:
     @staticmethod
     def get_url(day_of_week: str, day_number: int, month: str, version:int) -> str:
-        return f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-{version}.pdf" if version != 0 else f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}.pdf"
+        return f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-2024-{version}.pdf" if version != 0 else f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orarie-{day_of_week}-{day_number}-{month}-2024.pdf"
     
     @staticmethod 
     def make_output_row(class_identifier: str, hour: int | None, absent_professor: str, substitute: str, note: str) -> object:
