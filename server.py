@@ -20,11 +20,30 @@ class server:
             'substitute': substitute,
             'note': note
         }
+    
+    @staticmethod
+    def delete_pdf():
+        date = datetime.datetime.today()
+        day_of_week = days[date.weekday()]
+        day_number = date.day
+        month = month_names[date.month]
+
+        if os.path.exists(f'./{month}-{day_number}.pdf'):
+            os.remove(f'./{month}-{day_number}.pdf')
         
     def __init__(self, guild_id: discord.Guild.id, channel: discord.channel, class_identifier: str) -> None:
         self.guild_id = guild_id
         self.channel = channel
         self.class_identifier = class_identifier
+    
+    def delete_json(self):
+        date = datetime.datetime.today()
+        day_of_week = days[date.weekday()]
+        day_number = date.day
+        month = month_names[date.month]
+
+        if os.path.exists(f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'):
+            os.remove(f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json')
     
     async def send_variation(self, variation: object, deleted=False):
         color = 0x1dcf4c if deleted is False else 0xed1515

@@ -5,7 +5,14 @@ from discord import app_commands
 instances = dict()
 tzinfo = datetime.timezone(datetime.timedelta(hours=2))
 times = [
-    datetime.time(hour=19, minute=46, tzinfo=tzinfo)
+    datetime.time(hour=14, tzinfo=tzinfo),
+    datetime.time(hour=16, tzinfo=tzinfo),
+    datetime.time(hour=18, tzinfo=tzinfo),
+    datetime.time(hour=20, tzinfo=tzinfo)
+]
+
+delete_times = [
+    datetime.time(hour=1, tzinfo=tzinfo),
 ]
 
 token = open('token.txt', 'r').readline()
@@ -50,5 +57,11 @@ async def register(interaction: discord.Interaction, class_year_and_section: str
 async def update():
     for guild in instances.values():
         await guild.update()
-        
+
+@tasks.loop(time=delete_times)
+async def remove():
+    server.delete_pdf()
+    for guild in instances.values():
+        guild.delete_json()
+
 bot.run(token)
