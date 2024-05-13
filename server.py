@@ -66,7 +66,7 @@ class server:
         json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
         
         if not os.path.exists(pdf_path):
-            
+            ok_response = None
             for i in range(10):
                 response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, version=i))
             
