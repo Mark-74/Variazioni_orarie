@@ -1,4 +1,5 @@
-*.txt
+token.txt
+servers.txt
 *.pdf
 *.json
 __pycache__/
