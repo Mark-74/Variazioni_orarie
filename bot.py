@@ -58,10 +58,11 @@ async def register(interaction: discord.Interaction, class_year_and_section: str
 async def update():
     for guild in instances.values():
         await guild.update()
+        
+    server.delete_pdf()
 
 @tasks.loop(time=delete_times)
 async def remove():
-    server.delete_pdf()
     for guild in instances.values():
         guild.delete_json()
 

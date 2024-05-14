@@ -9,7 +9,7 @@ month_names = {
 
 class server:
     @staticmethod
-    def get_url(day_of_week: str, day_number: int) -> str:
+    def get_url(day_number: int) -> str:
         html = requests.get("https://www.ispascalcomandini.it/variazioni-orario-istituto-tecnico-tecnologico/2017/09/15/")
         soup = BeautifulSoup(html.text, 'html.parser')
         for tag in soup.find_all('a'):
@@ -28,11 +28,10 @@ class server:
     
     @staticmethod
     def delete_pdf():
-        date = datetime.datetime.today()
-        day_of_week = days[date.weekday()]
+        date = datetime.datetime.today() + datetime.timedelta(days=1)
         day_number = date.day
         month = month_names[date.month]
-
+        
         if os.path.exists(f'./{month}-{day_number}.pdf'):
             os.remove(f'./{month}-{day_number}.pdf')
         
@@ -43,7 +42,6 @@ class server:
     
     def delete_json(self):
         date = datetime.datetime.today()
-        day_of_week = days[date.weekday()]
         day_number = date.day
         month = month_names[date.month]
 
@@ -71,7 +69,7 @@ class server:
         json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
         
         if not os.path.exists(pdf_path):
-            response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number))
+            response = requests.get(self.get_url(day_number=day_number))
             
             open(pdf_path, 'wb').write(response.content)
                 
