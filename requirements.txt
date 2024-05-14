@@ -1,0 +1,7 @@
+camelot-py
+discord.py
+requests
+numpy
+opencv-python
+ghostscript
+bs4
