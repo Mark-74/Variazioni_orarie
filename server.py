@@ -1,4 +1,5 @@
 import discord, requests, datetime, os, camelot, asyncio, json
+from bs4 import *
 
 days = ['lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica']
 month_names = {
@@ -8,9 +9,13 @@ month_names = {
 
 class server:
     @staticmethod
-    def get_url(day_of_week: str, day_number: int, month: str, year:int, version:int, ext='e') -> str:
-        return f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orari{ext}-{day_of_week}-{day_number}-{month}-{year}-{version}.pdf" if version != 0 else f"https://www.ispascalcomandini.it/wp-content/uploads/2017/09/variazioni-orari{ext}-{day_of_week}-{day_number}-{month}-{year}.pdf"
-    
+    def get_url(day_of_week: str, day_number: int) -> str:
+        html = requests.get("https://www.ispascalcomandini.it/variazioni-orario-istituto-tecnico-tecnologico/2017/09/15/")
+        soup = BeautifulSoup(html.text, 'html.parser')
+        for tag in soup.find_all('a'):
+            if 'variazioni' in tag.text and str(day_number) in tag.text:
+                return tag['href']
+        
     @staticmethod 
     def make_output_row(class_identifier: str, hour: int | None, absent_professor: str, substitute: str, note: str) -> object:
         return {
@@ -59,7 +64,6 @@ class server:
         day_of_week = days[date.weekday()]
         day_number = date.day
         month = month_names[date.month]
-        year = date.year
         
         if day_of_week == days[6]: return
         
@@ -67,20 +71,9 @@ class server:
         json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
         
         if not os.path.exists(pdf_path):
-            ok_response = None
-            for i in range(10):
-                print(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, year=year, version=i))
-                response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, year=year, version=i))
-                if response.status_code == 200: ok_response = response
-
-                print(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, year=year, version=i, ext='o'))
-                response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number, month=month, year=year, version=i, ext='o'))
-                if response.status_code == 200: ok_response = response
+            response = requests.get(self.get_url(day_of_week=day_of_week, day_number=day_number))
             
-            if ok_response is not None:
-                with open(pdf_path, 'wb') as file:
-                    file.write(ok_response.content)
-            else: return
+            open(pdf_path, 'wb').write(response.content)
                 
         output = []
 
