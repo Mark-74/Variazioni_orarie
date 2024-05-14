@@ -59,7 +59,7 @@ async def update():
     for guild in instances.values():
         await guild.update()
         
-    server.delete_pdf()
+    server.server.delete_pdf()
 
 @tasks.loop(time=delete_times)
 async def remove():
