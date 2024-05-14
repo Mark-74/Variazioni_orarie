@@ -46,7 +46,8 @@ async def ping(interaction: discord.Interaction):
 
 @bot.tree.command(name='register', description='registers the server to get updates!')
 async def register(interaction: discord.Interaction, class_year_and_section: str):
-    
+    print(f'LOGGER: registered a new server with guild_id: {interaction.guild_id} and class: {class_year_and_section}') # Logging the registration
+
     if instances.get(interaction.guild_id) is None:
         instances[interaction.guild_id] = server.server(guild_id=interaction.guild_id, channel=interaction.channel, class_identifier=class_year_and_section)
         open("./servers.txt", 'a').write(f'{interaction.guild_id}#{interaction.channel.id}#{class_year_and_section}')
