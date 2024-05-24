@@ -5,10 +5,11 @@ from discord import app_commands
 instances = dict()
 tzinfo = datetime.timezone(datetime.timedelta(hours=2))
 times = [
+    datetime.time(hour=10, tzinfo=tzinfo),
+    datetime.time(hour=12, tzinfo=tzinfo),
     datetime.time(hour=14, tzinfo=tzinfo),
     datetime.time(hour=16, tzinfo=tzinfo),
     datetime.time(hour=18, tzinfo=tzinfo),
-    datetime.time(hour=20, tzinfo=tzinfo),
     datetime.time(hour=20, tzinfo=tzinfo)
 ]
 

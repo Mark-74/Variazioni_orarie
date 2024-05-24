@@ -113,7 +113,7 @@ class server:
         for variation in deleted_variations:
             await self.send_variation(variation=variation, deleted=True)
         
-        with open(json_path, 'w') as file:
+        with open(json_path, 'a') as file:
             for variation in output:
                 #if variation['absent_professor'] == '-': variation['absent_professor'] = 'Nessun sostituto'
                 await self.send_variation(variation=variation)
