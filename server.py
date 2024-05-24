@@ -16,8 +16,6 @@ class server:
             if 'variazioni' in tag.text and str(day_number) in tag.text:
                 return tag['href']
         
-        raise Exception(f"No variations for {day_number}.")
-        
     @staticmethod 
     def make_output_row(class_identifier: str, hour: int | None, absent_professor: str, substitute: str, note: str) -> object:
         return {
@@ -71,11 +69,7 @@ class server:
         json_path= f'./{month}-{day_number}-{self.class_identifier}-{self.guild_id}.json'
         
         if not os.path.exists(pdf_path):
-            try:
-                response = requests.get(self.get_url(day_number=day_number))
-            except Exception as e:
-                print(e)
-                return
+            response = requests.get(self.get_url(day_number=day_number))
             
             open(pdf_path, 'wb').write(response.content)
                 
