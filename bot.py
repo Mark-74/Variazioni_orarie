@@ -56,6 +56,14 @@ async def register(interaction: discord.Interaction, class_year_and_section: str
     else:
         await interaction.response.send_message("The server is already registered, there is no need to register it again.", ephemeral=True)
 
+@bot.tree.command(name='update', description='Ask for update.')
+async def update(interaction: discord.Interaction):
+    if instances.get(interaction.guild_id) is not None:
+        await instances[interaction.guild_id].update()
+        await interaction.response.send_message("Update requested!", ephemeral=True)
+    else:
+        await interaction.response.send_message("The server is not registered, please register it first.", ephemeral=True)
+        
 @tasks.loop(time=times)
 async def update():
     for guild in instances.values():
